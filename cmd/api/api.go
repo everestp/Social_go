@@ -10,14 +10,24 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-type application struct { 
+type application struct {   // this are dependency
 	config config
 	store store.Storage
+	
 
 }
 
-type config struct {
+type dbConfig struct {  
+	Addr         string
+	MaxOpenConns int
+	MaxIdleConns int
+	MaxIdleTime  string
+}
+
+
+type config struct {   // this are  confuigation
 	addr string
+	 db dbConfig
 	 
 }
 
