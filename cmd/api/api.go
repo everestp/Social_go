@@ -28,6 +28,7 @@ type dbConfig struct {
 type config struct {   // this are  confuigation
 	addr string
 	 db dbConfig
+	 env string
 	 
 }
 
