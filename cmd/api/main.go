@@ -13,7 +13,7 @@ func main(){
 	cfg := config{
 		addr: ":8000",
 		db: dbConfig{
-			Addr: "postgres://postgres:rest@localhost:5432/postgres?sslmode=disable",
+			Addr: "postgresql://neondb_owner:npg_k0WD6GpeTSui@ep-dawn-leaf-ad26dewr-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
 			MaxOpenConns: 30,
 			MaxIdleConns: 30,
 			MaxIdleTime: "15m",

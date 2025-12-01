@@ -1,0 +1,2 @@
+ALTER TABLE
+posts DROP CONSTRAINT fkr_user;
