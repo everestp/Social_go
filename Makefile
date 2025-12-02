@@ -36,3 +36,7 @@ migrate-force:
 migrate-reset:
 @migrate -path=$(MIGRATION_PATH) -database='$(DB_URL)' force 0
 @migrate -path=$(MIGRATION_PATH) -database='$(DB_URL)' up
+
+.PHONY: seed
+seed:
+@go run cmd/migrate/seed/main.go
