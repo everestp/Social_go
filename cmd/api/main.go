@@ -11,7 +11,7 @@ const version = "0.0.1"
 
 func main(){
 	cfg := config{
-		addr: ":8001",
+		addr: ":8000",
 		db: dbConfig{
 			Addr: "postgresql://neondb_owner:npg_k0WD6GpeTSui@ep-dawn-leaf-ad26dewr-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
 			MaxOpenConns: 30,
