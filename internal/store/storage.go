@@ -21,6 +21,9 @@ type Storage struct {
 	User  interface {
 		Create(context.Context , *User) error
 	}
+	Comments interface{
+		GetByPostID(ctx context.Context ,postID int64 )([]Comment ,error)
+	}
 
 }
 
@@ -30,6 +33,7 @@ func NewPostgressStorage(db *sql.DB ) Storage {
 	return  Storage{
          Posts: &PostStore{db},
 		 User:&UserStore{db},
+		 Comments: &CommentStore{db},
 
 	}
 }
