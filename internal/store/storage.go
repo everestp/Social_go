@@ -10,7 +10,7 @@ import (
 
 var (
 	ErrNotFound = errors.New("Resource not found")
-	QueryTimeoutDuration = time.Second * 5
+	QueryTimeoutDuration  = time.Second * 5
 )
 
 
@@ -23,6 +23,7 @@ type Storage struct {
 		Update(context.Context , *Post) error 
 	}
 	User  interface {
+		GetByID(context.Context , int64) (*User ,error)
 		Create(context.Context , *User) error
 	}
 	Comments interface{

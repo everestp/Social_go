@@ -3,7 +3,10 @@ package store
 import (
 	"context"
 	"database/sql"
+
 )
+
+
 
 type User struct {
 	ID        int64  `json:"id"`
@@ -13,12 +16,11 @@ type User struct {
 	CreatedAt string `json:"created_at"`
 }
 
-
-
 type UserStore struct {
 	db *sql.DB
 }
 
+// Create inserts a new user into the database
 func (s *UserStore) Create(ctx context.Context, user *User) error {
 	query := `
 		INSERT INTO users (username, password, email)
@@ -39,9 +41,36 @@ func (s *UserStore) Create(ctx context.Context, user *User) error {
 		&user.CreatedAt,
 	)
 
+	return err
+}
+
+// GetByID fetches a user by ID
+func (s *UserStore) GetByID(ctx context.Context, userID int64) (*User, error) {
+	query := `
+		SELECT id, username, email, password, created_at
+		FROM users
+		WHERE id = $1
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	user := &User{}
+
+	err := s.db.QueryRowContext(ctx, query, userID).Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.Password,
+		&user.CreatedAt,
+	)
+
 	if err != nil {
-		return err
+		if err == sql.ErrNoRows {
+			return nil, ErrNotFound
+		}
+		return nil, err
 	}
 
-	return nil
+	return user, nil
 }

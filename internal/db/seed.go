@@ -45,7 +45,7 @@ func Seed(store store.Storage) error {
 	
 	ctx := context.Background()
 
-	users := generateUsers(10)
+	users := generateUsers(30)
 
 	// Insert users into DB
 	for i, user := range users {
@@ -56,7 +56,7 @@ func Seed(store store.Storage) error {
 			log.Printf(" Creating user %s %s", i,user)
 	}
 
-	posts := generatePosts(20, users)
+	posts := generatePosts(40, users)
 	for i, post := range posts {
 		if err := store.Posts.Create(ctx, post); err != nil {
 			log.Println("Error creating post:", err)
