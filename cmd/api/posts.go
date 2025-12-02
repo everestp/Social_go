@@ -125,6 +125,7 @@ func (app *application) updatePostHandler(w http.ResponseWriter, r *http.Request
 
 	// Call store update
 	if err := app.store.Posts.Update(r.Context(), post); err != nil {
+		 
 		app.internalServerError(w, r, err)
 		log.Printf("Server has started 2%s", app.config.addr)
 		return
