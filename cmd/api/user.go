@@ -57,7 +57,15 @@ if err := readJSON(w, r, &payload); err !=nil{
 	app.badRequestResponse(w, r , err )
 }
   if err := app.store.Followers.Follow(r.Context(), followerUser.ID, payload.UserID); err != nil{
-	app.internalServerError(w, r , err )
+	 switch err{
+	 case store.ErrConflict:
+		app.conflictResponse(w, r , err )
+		return 
+	 default:
+		app.internalServerError(w, r, err)
+		return
+
+	 }
   }
 }
 
