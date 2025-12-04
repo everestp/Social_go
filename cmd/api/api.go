@@ -27,10 +27,14 @@ type dbConfig struct {
 	MaxIdleTime  string
 }
 
+type mailConfig struct {
+	exp time.Duration
+}
 type config struct { // this are  confuigation
 	addr string
 	db   dbConfig
 	env  string
+	mail mailConfig
 }
 
 func (app *application) mount() http.Handler {

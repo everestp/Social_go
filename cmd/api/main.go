@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/everestp/Social_go/internal/db"
 	"github.com/everestp/Social_go/internal/store"
@@ -36,6 +37,9 @@ func main(){
 			MaxIdleTime: "15m",
 		},
 		env: "development",
+		mail:  mailConfig{
+			exp: time.Hour *24 *3, // 3 days
+		},
 	}
 
 //Logger
