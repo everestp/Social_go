@@ -23,7 +23,7 @@ type UserWithToken struct {
 
 func (app *application) registerUserHandler(w http.ResponseWriter , r *http.Request) {
 	var  payload RegisterUserPayload
-	if err := readJSON(w, r,  payload ); err != nil{
+	if err := readJSON(w, r,  &payload ); err != nil{
 		app.badRequestResponse(w, r , err )
 		return
 	}
@@ -31,7 +31,10 @@ func (app *application) registerUserHandler(w http.ResponseWriter , r *http.Requ
 		app.badRequestResponse(w, r , err )
 		return
 	}
-user := &store.User{}
+user := &store.User{
+	Username: payload.Username,
+		Email:    payload.Email,
+}
 
 	// hash the  user password
 	 if err := user.Password.Set(payload.Password); err != nil {
@@ -60,9 +63,12 @@ user := &store.User{}
 		}
 		return
 	  }
+UserWithToken := UserWithToken{
+	User: user,
+	Token: plainToken,
+}
 
-
-	if err :=  app.jsonResponse(w, http.StatusCreated, nil); err != nil {
+	if err :=  app.jsonResponse(w, http.StatusCreated, UserWithToken); err != nil {
 		app.internalServerError(w, r, err)
 	}
 

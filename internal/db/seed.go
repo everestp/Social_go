@@ -2,10 +2,10 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"math/rand"
-
 
 	"github.com/everestp/Social_go/internal/store"
 )
@@ -41,15 +41,17 @@ var commentContents = []string{
 // --------------------------------------------------
 // Seed Database
 // --------------------------------------------------
-func Seed(store store.Storage) error {
+func Seed(store store.Storage ,db *sql.DB) error {
 	
 	ctx := context.Background()
 
 	users := generateUsers(30)
+	tx ,_:=db.BeginTx(ctx, nil)
 
 	// Insert users into DB
 	for i, user := range users {
-		if err := store.User.Create(ctx, user); err != nil {
+		if err := store.User.Create(ctx, tx ,user); err != nil {
+			_ = tx.Rollback()
 			log.Println("Error creating user:", err)
 			return err
 		}
@@ -89,7 +91,7 @@ func generateUsers(num int) []*store.User {
 		users[i] = &store.User{
 			Username: base + fmt.Sprintf("%d", i),
 			Email:    fmt.Sprintf("%s%d@example.com", base, i),
-			Password: "password123", // plain password for now
+		               // plain password for now
 		}
 	}
 

@@ -15,5 +15,5 @@ addr:= "postgresql://neondb_owner:npg_k0WD6GpeTSui@ep-dawn-leaf-ad26dewr-pooler.
 	}
 	defer conn.Close()
 	store :=store.NewPostgressStorage(conn) 
-	db.Seed(store)
+	db.Seed(store ,conn)
 }

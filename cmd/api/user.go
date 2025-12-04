@@ -90,6 +90,24 @@ if err := app.jsonResponse(w, http.StatusNoContent, nil); err != nil {
 	}
 
 } 
+func (app *application) activateUserHandler(w http.ResponseWriter, r *http.Request) {
+	token := chi.URLParam(r, "token")
+  err := app.store.User.Activate(r.Context() ,token)
+  if err != nil{
+	switch err {
+	case store.ErrNotFound:
+		app.badRequestResponse(w, r, err)
+		 default :
+		 	app.badRequestResponse(w, r, err)
+	}
+	return
+  }
+	
+
+	if err := app.jsonResponse(w, http.StatusNoContent, ""); err != nil {
+		app.internalServerError(w, r, err)
+	}
+}
 
 
 func (app *application) userContextMiddleware(next http.Handler) http.Handler {
