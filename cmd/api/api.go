@@ -1,18 +1,23 @@
 package main
 
 import (
-	"log"
+	"fmt"
+
 	"net/http"
 	"time"
 
 	"github.com/everestp/Social_go/internal/store"
+	// "github.com/everestp/Social_go/store" // this is required to  generate swagger docs
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+	"go.uber.org/zap"
 )
 
 type application struct { // this are dependency
 	config config
 	store  store.Storage
+	logger  *zap.SugaredLogger
 }
 
 type dbConfig struct {
@@ -38,6 +43,8 @@ func (app *application) mount() http.Handler {
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
+		docsURL := fmt.Sprintf("%s/swagger/doc.json", app.config.addr)
+		r.Get("/swagger/*",httpSwagger.Handler(httpSwagger.URL(docsURL)))
 
 		r.Route("/posts", func(r chi.Router) {
 			r.Post("/", app.createPostHandler)
@@ -76,6 +83,6 @@ func (app *application) run(mux http.Handler) error {
 		ReadTimeout:  time.Second * 10,
 		IdleTimeout:  time.Minute,
 	}
-	log.Printf("Server has started %s", app.config.addr)
+	app.logger.Infow("Server has started ","addr",app.config.addr)
 	return srv.ListenAndServe()
 }
